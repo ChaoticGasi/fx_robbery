@@ -4,7 +4,6 @@ local robberyInProgress = false
 local currentRobbery = nil
 local lastMarkerUpdate = 0
 
-
 Citizen.CreateThread(function()
     local sleepTime = 1000
 
@@ -16,7 +15,7 @@ Citizen.CreateThread(function()
         local isNearShop = false
         
         for _, shop in ipairs(Config.Shops) do
-            local distance = GetDistanceBetweenCoords(playerCoords, shop.coords.x, shop.coords.y, shop.coords.z, true)
+            local distance = #(playerCoords - shop.coords)
 
             
             if distance < 50.0 then
@@ -30,8 +29,10 @@ Citizen.CreateThread(function()
                     
                     if IsControlJustReleased(0, 38) then
                         ESX.TriggerServerCallback('fx_robbery:canRob', function(canRob, cooldownTime)
-                            if canRob then
+                            if canRob and cooldownTime == 0 then
                                 StartRobbery(shop)
+                            elseif cooldownTime == 9999 then
+                                ESX.ShowNotification(Config.Failed)
                             else
                                 local remainingTime = math.ceil(cooldownTime)
                                 ESX.ShowNotification(string.format(Config.Cooldown, remainingTime))
@@ -55,7 +56,7 @@ Citizen.CreateThread(function()
 
         if robberyInProgress and currentRobbery then
             local playerCoords = GetEntityCoords(PlayerPedId())
-            local distance = GetDistanceBetweenCoords(playerCoords, currentRobbery.coords.x, currentRobbery.coords.y, currentRobbery.coords.z, true)
+            local distance = #(playerCoords - currentRobbery.coords)
 
             if distance > currentRobbery.distance then
                 EndRobbery(false)
@@ -98,21 +99,19 @@ function StartRobbery(shop)
             end
 
             local playerCoords = GetEntityCoords(PlayerPedId())
-            local distance = GetDistanceBetweenCoords(playerCoords, currentRobbery.coords.x, currentRobbery.coords.y, currentRobbery.coords.z, true)
+            local distance = #(playerCoords - currentRobbery.coords)
 
             if distance > currentRobbery.distance then
 
                 EndRobbery(false)
                 return
             end
-
-
         end
 
 
         if robberyInProgress then
             ESX.ShowNotification(Config.Sucess .. (currentRobbery.reward))
-            TriggerServerEvent('fx_robbery:reward', currentRobbery.reward)
+            TriggerServerEvent('fx_robbery:reward', currentRobbery)
             EndRobbery(true)
         end
     end)
@@ -130,9 +129,8 @@ function EndRobbery(success)
         return
     else
         ESX.ShowNotification(Config.Failed)
+        TriggerServerEvent('fx_robbery:robberyStatus')
     end
-
-
 end
 
 
