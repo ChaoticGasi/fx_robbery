@@ -57,7 +57,7 @@ end)
 
 
 ESX.RegisterServerCallback('fx_robbery:getCopsOnline', function(source, cb)
-    cb(onlineCops)
+    cb(onlineCops.count)
 end)
 
 
