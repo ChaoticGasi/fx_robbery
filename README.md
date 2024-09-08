@@ -32,14 +32,8 @@ I decided to release this since I couldnt find a similar resource for free.
 
 #### **Preview:**
 
-https://www.youtube.com/watch?v=ObeHOtFyS6E
+[![VIDEO PREVIEW](https://img.youtube.com/vi/ObeHOtFyS6E/0.jpg)](https://www.youtube.com/watch?v=ObeHOtFyS6E)
 [OUTDATED]
-
-
-
-#### **Download:**
-
-
 
 
 
@@ -128,5 +122,3 @@ Added Possibilty to change Notification translations in Config
 2. Place the script in your FiveM server's resources directory.
 3. Add `start [script_name]` to your server's `server.cfg` file.
 4. Restart your server and configure the script settings as desired.
-
-Enhance your server's roleplay with this robust robbery script and bring thrilling heists to your gameplay! Download now and start robbing!
