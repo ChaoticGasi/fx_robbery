@@ -79,13 +79,22 @@ ESX.RegisterServerCallback('fx_robbery:canRob', function(source, cb, coords)
 end)
 
 
+local function getDataFromCoords(coords)
+    for i=1, #Config.Shops, 1 do
+        if Config.Shops[i].coords == coords then
+            return Config.Shops[i]
+        end
+    end
+end
+
 RegisterNetEvent('fx_robbery:startRobbery')
 AddEventHandler('fx_robbery:startRobbery', function(coords)
     local xPlayer = ESX.GetPlayerFromId(source)
     if not xPlayer then return end
     if robberyPlayerList[xPlayer.source] then return end
+    local cfg = getDataFromCoords(coords)
 
-    robberyPlayerList[xPlayer.source] = {coords = coords, inRobbery = true, startTime = os.time(), endTime = os.time() + Config.Shops[coords].robberyTime}
+    robberyPlayerList[xPlayer.source] = {coords = coords, inRobbery = true, startTime = os.time(), endTime = os.time() + cfg.robberyTime}
     StartRobberyCooldown(coords)
     TriggerEvent("fx_robbery:AlertPolice", coords)
 end)
